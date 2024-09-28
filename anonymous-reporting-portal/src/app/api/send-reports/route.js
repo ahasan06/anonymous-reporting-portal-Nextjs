@@ -1,7 +1,7 @@
 import { dbConnect } from "@/lib/dbConnect";
 import Report from "@/models/Report";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // Import your auth options
+import { authOptions } from "../auth/[...nextauth]/option";
 import { nanoid } from 'nanoid'; // To generate a unique report ID
 import { NextResponse } from "next/server"; // Use NextResponse from next/server
 

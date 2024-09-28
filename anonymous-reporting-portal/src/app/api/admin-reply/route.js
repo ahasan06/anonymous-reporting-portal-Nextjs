@@ -1,7 +1,7 @@
 import { dbConnect } from "@/lib/dbConnect";
 import Report from "@/models/Report";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // Adjust path as necessary
+import { authOptions } from "../auth/[...nextauth]/option";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
