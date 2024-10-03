@@ -81,6 +81,6 @@ ReportSchema.pre('save', function (next) {
 });
 
 // Export the report model
-const Report = mongoose.models.Report || mongoose.model("Report", ReportSchema);
+const ReportModel = mongoose.models.Report || mongoose.model("Report", ReportSchema);
 
-export default Report;
+export default ReportModel;
