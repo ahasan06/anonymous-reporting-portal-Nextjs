@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const usernameValidation = z
   .string()
-  .min(6, "Username must be at least two characters long")
-  .max(12, "Username must not be more than 20 characters")
+  .min(6, "Username must be at least six characters long")
+  .max(10, "Username must not be more than 8 characters")
   .regex(/^[0-9]+$/, "Username must only contain numbers (0-9)");
 
 
@@ -18,7 +18,7 @@ export const passwordValidation = z
 export const emailValidation = z
         .string()
         .email({ message: "Invalid email address" })
-        .regex(/^[\w-\.]+@uap-bd\.edu$/, { message: "Email must belong to the domain '@uap-bd.edu'" });
+        // .regex(/^[\w-\.]+@uap-bd\.edu$/, { message: "Email must belong to the domain '@uap-bd.edu'" });
 
 export const roleValidation = z.enum(["user", "admin"],{
     errorMap: () => ({ message: "Role must be either 'user' or 'admin'" }),
@@ -29,6 +29,7 @@ export const signUpSchema  = z.object({
     email: emailValidation,
     password: passwordValidation,
     role: roleValidation.default("user"), 
+    invitationCode: z.string().optional(),
 })
 
 

@@ -6,32 +6,32 @@ import { NextResponse } from "next/server";
 await dbConnect()
 export async function POST(request) {
     try {
-       
+
         const reqBody = await request.json()
         console.log("Post request for signup", reqBody);
         const { username, email, password, role, invitationCode } = reqBody;
 
-        // 1. Validate the email domain for manual signup (only university emails allowed)
-        const emailDomain = email.split('@')[1];
-        if (emailDomain !== 'uap-bd.edu') {
-            return NextResponse.json({
-                success: false,
-                message: "You must use your university email address (@uap-bd.edu).",
-            },
-                { status: 400 })
-        }
+        //1. Validate the email domain for manual signup (only university emails allowed)
+        // const emailDomain = email.split('@')[1];
+        // if (emailDomain !== 'uap-bd.edu') {
+        //     return NextResponse.json({
+        //         success: false,
+        //         message: "You must use your university email address (@uap-bd.edu).",
+        //     },
+        //         { status: 400 })
+        // }
 
-        // 2. Validate the username to match the university ID (e.g., 2110100...)
-        const emailIdAsUsername = email.split('@')[0];
-        if (emailIdAsUsername !== username) {
-            return NextResponse.json({
-                success: false,
-                message: "You must use your university ID as username (e.g., 2110100...).",
-            },
-                { status: 400 })
-        }
+        //2. Validate the username to match the university ID (e.g., 2110100...)
+        // const emailIdAsUsername = email.split('@')[0];
+        // if (emailIdAsUsername !== username) {
+        //     return NextResponse.json({
+        //         success: false,
+        //         message: "You must use your university ID as username (e.g., 2110100...).",
+        //     },
+        //         { status: 400 })
+        // }
 
-        // 3. Check if the username is already taken by a verified user
+        //3. Check if the username is already taken by a verified user
         const existingUserVerifiedByUsername = await UserModel.findOne({
             username,
             isVerified: true
@@ -42,11 +42,6 @@ export async function POST(request) {
                 message: "Username is already taken!",
             }, { status: 400 });
         }
-
-
-        // 4. Generate verification code
-        const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
-        console.log("Generated 6-digit verify code:", verifyCode);
 
         // 5. Check if the email is already in use
         const existingUserByEmail = await UserModel.findOne({ email })
@@ -76,7 +71,7 @@ export async function POST(request) {
             let userRole = 'user'
 
             if (role === 'admin') {
-                if (invitationCode === process.env.ADMIN_SIGNUP_CODE) {
+                if (invitationCode == process.env.ADMIN_SIGNUP_CODE) {
                     userRole = 'admin';
                 }
                 else {
@@ -97,6 +92,10 @@ export async function POST(request) {
                     }, { status: 400 });
                 }
             }
+            
+            // 4. Generate verification code
+            const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+            console.log("Generated 6-digit verify code:", verifyCode);
 
             // 7. Create a new user if email and username are not already used
             const salt = await bcrypt.genSalt(10);
@@ -118,7 +117,7 @@ export async function POST(request) {
             const savedUser = await newUser.save();
             console.log("New user created:", savedUser);
 
-            // 8. Send verification email 
+            //8. Send verification email 
             const emailResponse = await sendVerificationEmail(email, username, verifyCode)
             console.log("Email response:", emailResponse);
             if (!emailResponse.success) {
