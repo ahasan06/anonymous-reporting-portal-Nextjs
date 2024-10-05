@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { redirect, useParams,useRouter } from 'next/navigation'
+import { redirect, useParams, useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signInSchema } from '@/schemas/signInSchema'
@@ -9,7 +9,7 @@ import axios from 'axios'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { toast } from 'react-hot-toast'; 
+import { toast } from 'react-hot-toast';
 import { useState } from "react";
 import { signIn } from 'next-auth/react';
 
@@ -19,22 +19,22 @@ function SignIn() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const form = useForm({
-    resolver:zodResolver(signInSchema),
+    resolver: zodResolver(signInSchema),
     defaultValues: {
-      identifier: '', 
+      identifier: '',
       password: ''
     }
   })
 
-  const onSubmit = async (data)=>{
+  const onSubmit = async (data) => {
     try {
-      const signinResult = await signIn('credentials',{
+      const signinResult = await signIn('credentials', {
         redirect: false,
         identifier: data.identifier,
         password: data.password
       })
       console.log(signinResult);
-      
+
       if (signinResult?.error) {
         toast.error("Incorrect email or password!");
       }
@@ -42,10 +42,10 @@ function SignIn() {
         toast.success("Signin successful,redirecting...");
         router.push('/dashboard');
       }
-      
+
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'Signup failed. Please try again.';
-      console.log("errorMessage",errorMessage);
+      console.log("errorMessage", errorMessage);
       toast.error(errorMessage);
     }
   }
@@ -76,7 +76,7 @@ function SignIn() {
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
@@ -84,43 +84,43 @@ function SignIn() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <div className="relative">
-                    <Input
-                     type={showPassword?"text":"password"}
-                      placeholder="Enter your password"
-                      {...field}
-                    />
-                    <button type="button"  className="absolute right-0 inset-y-0 flex items-center pr-3 cursor-pointer"
-                    onClick ={()=>setShowPassword((prev)=>!prev)}
-                    >
-                      {
-                        showPassword ? (
-                          <EyeOff className="w-5 h-5  text-gray-500" />
-                        ) : (
-                          <Eye className="w-5  h-5 text-gray-500" />
-                        )
-                      }
-                    </button>
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        {...field}
+                      />
+                      <button type="button" className="absolute right-0 inset-y-0 flex items-center pr-3 cursor-pointer"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                      >
+                        {
+                          showPassword ? (
+                            <EyeOff className="w-5 h-5  text-gray-500" />
+                          ) : (
+                            <Eye className="w-5  h-5 text-gray-500" />
+                          )
+                        }
+                      </button>
                     </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-             <Button type="submit" disabled={isSubmitting}>
-              
+            <Button type="submit" disabled={isSubmitting}>
+
               {
                 isSubmitting ?
-                (
-                <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-                </>
-                ):
-                (
-                  <>Sign in</>
-                )
+                  (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                    </>
+                  ) :
+                  (
+                    <>Sign in</>
+                  )
               }
 
-             </Button>
+            </Button>
           </form>
 
         </Form>
