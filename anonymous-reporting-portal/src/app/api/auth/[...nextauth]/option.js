@@ -112,13 +112,13 @@ export const authOptions = {
         })
     ],
     callbacks: {
-        async signIn({ account, profile }) {
-            const emailDomain = profile.email.split('@')[1];
-            if (emailDomain !== 'uap-bd.edu') {
-                return `/sign-in`;
-            }
-            return true;
-        },
+        // async signIn({ account, profile }) {
+        //     const emailDomain = profile.email.split('@')[1];
+        //     if (emailDomain !== 'uap-bd.edu') {
+        //         return `/sign-in`;
+        //     }
+        //     return true;
+        // },
 
         async session({ session, token }) {
             if (token) {
@@ -142,7 +142,7 @@ export const authOptions = {
         }
     },
     pages: {
-        signIn: '/sign-in',
+        signIn: '/signin',
     },
     session: {
         strategy: "jwt",
