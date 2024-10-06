@@ -11,12 +11,17 @@ export const authOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            authorization: {
+                params: {
+                    prompt: "select_account", 
+                },
+            },
             async profile(profile) {
-                console.log("profile",profile);
-                const emailDomain = profile.email.split('@')[1];
-                if (emailDomain !== 'uap-bd.edu') {
-                    throw new Error('Only university email addresses are allowed.');
-                }
+                // console.log("profile",profile);
+                // const emailDomain = profile.email.split('@')[1];
+                // if (emailDomain !== 'uap-bd.edu') {
+                //     throw new Error('Only university email addresses are allowed.');
+                // }
         
                 await dbConnect();
         
@@ -112,6 +117,7 @@ export const authOptions = {
         })
     ],
     callbacks: {
+
         // async signIn({ account, profile }) {
         //     const emailDomain = profile.email.split('@')[1];
         //     if (emailDomain !== 'uap-bd.edu') {
@@ -119,6 +125,13 @@ export const authOptions = {
         //     }
         //     return true;
         // },
+
+        async signIn({ user, account }) {
+            if (account.provider === 'google') {
+                return true; 
+            }
+            return true;
+        },
 
         async session({ session, token }) {
             if (token) {
@@ -142,7 +155,7 @@ export const authOptions = {
         }
     },
     pages: {
-        signIn: '/signin',
+        signIn: '/dashboard',
     },
     session: {
         strategy: "jwt",

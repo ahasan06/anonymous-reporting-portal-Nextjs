@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect } from 'react';
 import axios from "axios";
 import { toast } from 'react-hot-toast'; // Import toast from react-hot-toast
 import { signUpSchema } from "@/schemas/signUpSchema";
@@ -10,8 +11,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"; // Assuming the path for shadcn Select
-
+import { AiFillGoogleCircle } from 'react-icons/ai';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"; 
+import { signIn } from "next-auth/react";
 function SignUp() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [role, setRole] = useState('user'); // Default role is 'user'
@@ -26,11 +28,15 @@ function SignUp() {
       username: '',
       email: '',
       password: '',
-      role: 'user', 
+      role: 'user',
       invitationCode: ''
     }
   });
 
+  
+  const handleGoogleSignIn = async () => {
+    await signIn('google', { callbackUrl: '/dashboard' }); 
+};
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     setServerError(null); // Reset any previous errors
@@ -39,11 +45,11 @@ function SignUp() {
       toast.success('Signup successful! Redirecting...');
       router.push(`/verify/${data.username}`);
     } catch (error) {
-      console.log("error",error);
+      console.log("error", error);
       const errorMessage = error.response?.data?.message || 'Signup failed. Please try again.';
-      console.log("errorMessage",errorMessage);
+      console.log("errorMessage", errorMessage);
       toast.error(errorMessage);
-      setServerError(errorMessage); 
+      setServerError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -130,7 +136,7 @@ function SignUp() {
             {role === 'admin' && (
               <FormField
                 control={form.control}
-                name="invitationCode" 
+                name="invitationCode"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Admin Code</FormLabel>
@@ -160,36 +166,44 @@ function SignUp() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <div className="relative">
-                    <Input type={showPassword?"text":"password"} className="pr-10"  placeholder="Enter your password" {...field} />
+                      <Input type={showPassword ? "text" : "password"} className="pr-10" placeholder="Enter your password" {...field} />
 
-                    <button className="absolute right-0 inset-y-0 flex items-center pr-3 cursor-pointer"
-                    type="button"
-                     onClick={() => setShowPassword((prev) => !prev)}
-                    >
-                    {showPassword ? (
+                      <button className="absolute right-0 inset-y-0 flex items-center pr-3 cursor-pointer"
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                      >
+                        {showPassword ? (
                           <EyeOff className="w-5 h-5  text-gray-500" />
                         ) : (
                           <Eye className="w-5  h-5 text-gray-500" />
-                    )}
-                    </button>
+                        )}
+                      </button>
                     </div>
-                    
+
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            {/* Submit Button */}
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-                </>
-              ) : (
-                <>Signup</>
-              )}
-            </Button>
+            <div className="flex items-center justify-between space-x-4">
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                  </>
+                ) : (
+                  <>Signup</>
+                )}
+              </Button>
+              <Button
+                type="button"
+                onClick={handleGoogleSignIn} // Call the signIn function on click
+                className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              >
+                <AiFillGoogleCircle className="w-5 h-5" />
+                <span>Sign in with Google as user</span>
+              </Button>
+            </div>
           </form>
         </Form>
       </div>

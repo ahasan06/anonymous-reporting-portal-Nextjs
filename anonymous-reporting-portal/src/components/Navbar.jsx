@@ -23,7 +23,9 @@ function Navbar() {
   const handleSignInClick = () => {
     setLoading(true);
   };
-
+  const handleLogout = async () => {
+    await signOut({ redirect: true, callbackUrl: '/dashboard' });
+};
   return (
     <nav className="bg-gray-900 p-4 shadow-lg font-sans">
       <div className="container mx-auto flex items-center justify-between">
@@ -165,7 +167,7 @@ function Navbar() {
             </Link>
             {session ? (
               <Button
-                onClick={() => signOut()}
+                onClick={handleLogout}
                 className="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
               >
 
