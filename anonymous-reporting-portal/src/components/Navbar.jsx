@@ -44,7 +44,7 @@ function Navbar() {
         <div className="hidden md:flex items-center justify-between w-5/6">
           {/* Left side navigation */}
           <div className="text-gray-300 flex items-center space-x-8">
-            <Link href="/" className="flex items-center hover:text-white transition duration-300">
+            <Link href="/dashboard" className="flex items-center hover:text-white transition duration-300">
               <FaHome className="mr-1" /> Home
             </Link>
             <Link href="/about" className="flex items-center hover:text-white transition duration-300">
@@ -145,7 +145,7 @@ function Navbar() {
           </div>
           <div>
 
-            <Link href="/" className="flex items-center px-4 py-2 hover:bg-gray-700 rounded-md">
+            <Link href="/dashboard" className="flex items-center px-4 py-2 hover:bg-gray-700 rounded-md">
               <FaHome className="mr-2" /> Home
             </Link>
             <Link href="/about" className="flex items-center px-4 py-2 hover:bg-gray-700 rounded-md">

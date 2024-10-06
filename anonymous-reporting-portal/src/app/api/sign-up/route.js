@@ -118,14 +118,14 @@ export async function POST(request) {
             console.log("New user created:", savedUser);
 
             //8. Send verification email 
-            // const emailResponse = await sendVerificationEmail(email, username, verifyCode)
-            // console.log("Email response:", emailResponse);
-            // if (!emailResponse.success) {
-            //     return NextResponse.json({
-            //         success: false,
-            //         message: emailResponse.message,
-            //     }, { status: 500 });
-            // }
+            const emailResponse = await sendVerificationEmail(email, username, verifyCode)
+            console.log("Email response:", emailResponse);
+            if (!emailResponse.success) {
+                return NextResponse.json({
+                    success: false,
+                    message: emailResponse.message,
+                }, { status: 500 });
+            }
 
             return NextResponse.json({
                 success: true,
