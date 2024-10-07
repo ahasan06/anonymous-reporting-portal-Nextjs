@@ -7,6 +7,7 @@ import { Button } from './ui/button';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
 import { Loader2 } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from 'next/link';
 
 function Navbar() {
@@ -25,9 +26,9 @@ function Navbar() {
   };
   const handleLogout = async () => {
     await signOut({ redirect: true, callbackUrl: '/dashboard' });
-};
+  };
   return (
-    <nav className="bg-gray-900 p-4 shadow-lg font-sans">
+    <nav className="bg-gray-900 p-4 shadow-lg font-sans text-sm md:text-[16px]">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2">
@@ -58,42 +59,50 @@ function Navbar() {
           </div>
           {/* user navigation*/}
           <div className="flex items-center space-x-6">
-          {
-            role ==='user'&&(
-            <>
-            <Link href="/submit-report" className="text-white hover:text-gray-400">
-              Submit a Report
-            </Link>
-            <Link href="/track-report" className="text-white hover:text-gray-400">
-              Track Report
-            </Link>
-            <Link href="/communicate-admin" className="text-white hover:text-gray-400">
-              Admin Communication
-            </Link>
-              </>
-            )
-          }
-          {
-            role ==='admin'&&(
-            <>
-            <Link href="/manage-reports" className="text-white hover:text-gray-400">
-              Manage Reports
-            </Link>
-            <Link href="/reply-report" className="text-white hover:text-gray-400">
-              Reply to Reports
-            </Link>
-            <Link href="/user-management" className="text-white hover:text-gray-400">
-              User Management
-            </Link>
-              </>
-            )
-          }
+            {
+              role === 'user' && (
+                <>
+                  <Link href="/submit-report" className="text-white hover:text-gray-400">
+                    Submit a Report
+                  </Link>
+                  <Link href="/track-report" className="text-white hover:text-gray-400">
+                    Track Report
+                  </Link>
+                  <Link href="/communicate-admin" className="text-white hover:text-gray-400">
+                    Admin Communication
+                  </Link>
+                </>
+              )
+            }
+            {
+              role === 'admin' && (
+                <>
+                  <Link href="/manage-reports" className="text-white hover:text-gray-400">
+                    Manage Reports
+                  </Link>
+                  <Link href="/reply-report" className="text-white hover:text-gray-400">
+                    Reply to Reports
+                  </Link>
+                  <Link href="/user-management" className="text-white hover:text-gray-400">
+                    User Management
+                  </Link>
+                </>
+              )
+            }
             {/* Login/Signup Section */}
             {session ? (
               <>
-                <span className="text-gray-300 text-sm italic">
-                  Hello, {user?.username || user?.email}
-                </span>
+                <div className="flex items-center gap-2 text-gray-300 text-sm italic">
+                  <Avatar className="flex-shrink-0">
+                    <AvatarImage src={user?.image} alt="User Avatar" className="rounded-full border-2 border-white-400" />
+                    <AvatarFallback className="flex items-center justify-center bg-slate-400 text-black border-2 border-white-400 rounded-full">
+                      {user?.role?.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="truncate">
+                    {user?.username || user?.email}
+                  </span>
+                </div>
                 <Button
                   onClick={() => signOut()}
                   className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300"
