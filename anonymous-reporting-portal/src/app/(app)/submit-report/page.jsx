@@ -45,6 +45,7 @@ const ISSUE_TYPE_OPTIONS = [
 function SubmitReport() {
     const [evidenceFiles, setEvidenceFiles] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [anonymousReportTrackCode ,setAnonymousReportTrackCode] = useState(null)
 
     const form = useForm({
         resolver:zodResolver(reportSchema),
@@ -77,11 +78,17 @@ function SubmitReport() {
             const response = await axios.post('/api/send-reports', formData);
             console.log("report response :", response);
             toast.success('Report submitted successfully');
+            const code = response?.data?.anonymousCode
+            if (!code) {
+                toast.error("anonymouse tracking code not found!")
+            }
+            setAnonymousReportTrackCode(code)
             form.reset()
             setEvidenceFiles([])
         } catch (error) {
+            const errorMessage = error.response.data.message ||"an error occured!"
             console.log(error.message);
-            toast.error('Failed to submit the report');
+            toast.error(errorMessage);
         }
         finally {
             setIsSubmitting(false);
@@ -157,7 +164,7 @@ function SubmitReport() {
 
                         {/* File Upload for Evidence */}
                         <FormItem>
-                            <Label htmlFor="evidence">Upload evidence (optional)</Label>
+                            <Label htmlFor="evidence">Upload evidence ( <span className="text-red-600 italic text-sm opacity-65">if any</span> ) :</Label>
                             <Input
                                 id="picture"
                                 type="file"

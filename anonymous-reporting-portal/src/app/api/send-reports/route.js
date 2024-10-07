@@ -8,13 +8,13 @@ import { NextResponse } from "next/server"; // Use NextResponse from next/server
 export async function POST(req) {
     try {
         // Step 1: Check session (use getServerSession for App Router)
-        // const session = await getServerSession(authOptions);
-        // if (!session) {
-        //     return NextResponse.json({
-        //         success: false,
-        //         message: "You need to log in to submit a report."
-        //     }, { status: 401 });
-        // }
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({
+                success: false,
+                message: "You need to log in to submit a report."
+            }, { status: 401 });
+        }
 
         // Step 2: Connect to the database
         await dbConnect();
