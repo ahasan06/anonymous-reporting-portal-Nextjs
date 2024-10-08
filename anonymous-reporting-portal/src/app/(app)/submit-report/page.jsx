@@ -10,7 +10,7 @@ import { toast } from 'react-hot-toast'
 import { Loader2 } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { reportSchema } from '@/schemas/reportSchema'
-
+import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import {
     Select,
@@ -45,7 +45,7 @@ const ISSUE_TYPE_OPTIONS = [
 function SubmitReport() {
     const [evidenceFiles, setEvidenceFiles] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [anonymousReportTrackCode ,setAnonymousReportTrackCode] = useState(null)
+    const router = useRouter();
 
     const form = useForm({
         resolver:zodResolver(reportSchema),
@@ -72,7 +72,6 @@ function SubmitReport() {
         };
         console.log(formData);
 
-        // API call using axios (replace 'your-api-endpoint' with actual endpoint)
         try {
            
             const response = await axios.post('/api/send-reports', formData);
@@ -82,7 +81,9 @@ function SubmitReport() {
             if (!code) {
                 toast.error("anonymouse tracking code not found!")
             }
-            setAnonymousReportTrackCode(code)
+            else{
+                router.push(`/report-success?code=${code}`);
+            }
             form.reset()
             setEvidenceFiles([])
         } catch (error) {
@@ -109,7 +110,7 @@ function SubmitReport() {
                             name="department"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Choose your complaint department</FormLabel>
+                                    <FormLabel>Choose your complaint : </FormLabel>
                                     <Select onValueChange={field.onChange}>
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Department" />
@@ -129,7 +130,7 @@ function SubmitReport() {
                             name="issueType"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Choose your issue type</FormLabel>
+                                    <FormLabel>Choose your issue type :</FormLabel>
                                     <Select onValueChange={field.onChange}>
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Issue Type" />
@@ -149,7 +150,7 @@ function SubmitReport() {
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <Label htmlFor="description">Your Message</Label>
+                                    <Label htmlFor="description">Explain your complain:</Label>
                                     <Textarea
                                         {...field}
                                         placeholder="Type your message here."
