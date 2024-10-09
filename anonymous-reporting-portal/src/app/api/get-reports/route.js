@@ -8,13 +8,13 @@ import { NextResponse } from "next/server";
 export async function GET(request) {
     try {
         await dbConnect()
-        // const session = await getServerSession(authOptions)
-        // if (!session || !session.user || ['admin','moderator'].includes(session.user.role)) {
-        //     return NextResponse.json(
-        //         { success: false, message: "Unauthorized access or user not authenticated" },
-        //         { status: 401 }
-        //     )
-        // }
+        const session = await getServerSession(authOptions)
+        if (!session || !session.user || ['admin','moderator'].includes(session.user.role)) {
+            return NextResponse.json(
+                { success: false, message: "Unauthorized access or user not authenticated" },
+                { status: 401 }
+            )
+        }
         const reports = await ReportModel.find().select("anonymousCode createdAt department issueType status description messages")
         if (!reports || reports.length === 0) {
             return NextResponse.json(
