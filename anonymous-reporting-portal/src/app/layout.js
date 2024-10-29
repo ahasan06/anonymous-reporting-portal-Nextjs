@@ -2,6 +2,7 @@ import AuthProvider from "@/context/AuthProvider";
 import Navbar from "@/components/Navbar";
 import { Toaster } from 'react-hot-toast';
 import "./globals.css";
+import Footer from "@/components/Footer";
 
 
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           {children}
           <Toaster />
+          <Footer/>
         </body>
       </AuthProvider>
     </html>

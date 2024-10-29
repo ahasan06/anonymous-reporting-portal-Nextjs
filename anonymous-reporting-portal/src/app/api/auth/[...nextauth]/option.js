@@ -17,11 +17,11 @@ export const authOptions = {
                 },
             },
             async profile(profile) {
-                // console.log("profile",profile);
-                // const emailDomain = profile.email.split('@')[1];
-                // if (emailDomain !== 'uap-bd.edu') {
-                //     throw new Error('Only university email addresses are allowed.');
-                // }
+                console.log("profile",profile);
+                const emailDomain = profile.email.split('@')[1];
+                if (emailDomain !== 'uap-bd.edu') {
+                    throw new Error('Only university email addresses are allowed.');
+                }
         
                 await dbConnect();
         
@@ -47,9 +47,9 @@ export const authOptions = {
                 // Handle role assignment (e.g., 'admin' or 'moderator')
                 let userRole = 'user'; // Default role
         
-                if (profile.email === '21101006@uap-bd.edu') {  // Replace with actual logic
-                    userRole = 'admin'; // Assign admin role
-                }
+                // if (profile.email === '21101006@uap-bd.edu') {  // Replace with actual logic
+                //     userRole = 'admin'; // Assign admin role
+                // }
         
                 const newUser = new UserModel({
                     username: profile.email.split('@')[0],
@@ -123,7 +123,7 @@ export const authOptions = {
         //     if (emailDomain !== 'uap-bd.edu') {
         //         return `/sign-in`;
         //     }
-        //     return true;
+        //     return `/sign-in`;
         // },
 
         async signIn({ user, account }) {

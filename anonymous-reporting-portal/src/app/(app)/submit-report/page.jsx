@@ -48,11 +48,12 @@ function SubmitReport() {
     const router = useRouter();
 
     const form = useForm({
-        resolver:zodResolver(reportSchema),
+        resolver: zodResolver(reportSchema),
         defaultValues: {
             department: '',
             issueType: '',
             description: '',
+            occurrenceDate: '',
             evidence: [],
         }
     });
@@ -73,7 +74,7 @@ function SubmitReport() {
         console.log(formData);
 
         try {
-           
+
             const response = await axios.post('/api/send-reports', formData);
             console.log("report response :", response);
             toast.success('Report submitted successfully');
@@ -81,13 +82,13 @@ function SubmitReport() {
             if (!code) {
                 toast.error("anonymouse tracking code not found!")
             }
-            else{
+            else {
                 router.push(`/report-success?code=${code}`);
             }
             form.reset()
             setEvidenceFiles([])
         } catch (error) {
-            const errorMessage = error.response.data.message ||"an error occured!"
+            const errorMessage = error.response.data.message || "an error occured!"
             console.log(error.message);
             toast.error(errorMessage);
         }
@@ -144,6 +145,23 @@ function SubmitReport() {
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="occurrenceDate"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Occurrence Date:</FormLabel>
+                                    <Input
+                                        {...field}
+                                        type="date"
+                                        id="occurrenceDate"
+                                        placeholder="Select the date when the incident occurred"
+                                    />
+                                </FormItem>
+                            )}
+                        />
+
+
 
                         <FormField
                             control={form.control}

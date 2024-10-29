@@ -2,17 +2,15 @@
 import React, { useState } from 'react';
 import { FaBars, FaTimes, FaHome, FaInfoCircle, FaEnvelope, FaSignInAlt, FaUserPlus } from 'react-icons/fa';  // Adding icons for links
 import Image from 'next/image';
-import logo from '../../public/logo.jpg';
+import logo from '../../public/logo-anonymous.png';
 import { Button } from './ui/button';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
-import { Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from 'next/link';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const { data: session } = useSession();
   const user = session?.user;
   const role = session?.user?.role;
@@ -21,19 +19,17 @@ function Navbar() {
     setIsOpen(!isOpen);
   };
 
-  const handleSignInClick = () => {
-    setLoading(true);
-  };
+ 
   const handleLogout = async () => {
     await signOut({ redirect: true, callbackUrl: '/dashboard' });
   };
   return (
-    <nav className="bg-gray-900 p-4 shadow-lg font-sans text-sm md:text-[16px]">
+    <nav className="bg-blue-950 p-4 shadow-lg font-sans text-sm md:text-[16px]">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <Image src={logo} alt="Website Logo" width={45} height={45} />
-          <h1 className="text-white text-2xl font-semibold tracking-wide">Visionary</h1>
+          <Image src={logo} alt="Website Logo" width={60} height={60} />
+          <h1 className="text-gray-300 font-semibold tracking-wide">Anonymous Reporting <span className="tracking-[1.5rem] text-gray-400">portal</span></h1>
         </div>
 
         {/* Hamburger Menu for Mobile */}
@@ -80,7 +76,7 @@ function Navbar() {
                   <Link href="/manage-reports" className="text-white hover:text-gray-400">
                     Manage Reports
                   </Link>
-                  <Link href="/reply-report" className="text-white hover:text-gray-400">
+                  <Link href="/communicateWith-user" className="text-white hover:text-gray-400">
                     Reply to Reports
                   </Link>
                   <Link href="/user-management" className="text-white hover:text-gray-400">
@@ -114,14 +110,9 @@ function Navbar() {
               <>
                 <Link href="/sign-in">
                   <Button
-                    onClick={handleSignInClick}
                     className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
                   >
-                    {loading ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
                       <FaSignInAlt className="mr-2" />
-                    )}
                     Sign In
                   </Button>
                 </Link>

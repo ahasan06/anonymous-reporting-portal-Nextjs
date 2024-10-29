@@ -12,24 +12,24 @@ export async function POST(request) {
         const { username, email, password, role, invitationCode } = reqBody;
 
         //1. Validate the email domain for manual signup (only university emails allowed)
-        // const emailDomain = email.split('@')[1];
-        // if (emailDomain !== 'uap-bd.edu') {
-        //     return NextResponse.json({
-        //         success: false,
-        //         message: "You must use your university email address (@uap-bd.edu).",
-        //     },
-        //         { status: 400 })
-        // }
+        const emailDomain = email.split('@')[1];
+        if (emailDomain !== 'uap-bd.edu') {
+            return NextResponse.json({
+                success: false,
+                message: "You must use your university email address (@uap-bd.edu).",
+            },
+                { status: 400 })
+        }
 
         //2. Validate the username to match the university ID (e.g., 2110100...)
-        // const emailIdAsUsername = email.split('@')[0];
-        // if (emailIdAsUsername !== username) {
-        //     return NextResponse.json({
-        //         success: false,
-        //         message: "You must use your university ID as username (e.g., 2110100...).",
-        //     },
-        //         { status: 400 })
-        // }
+        const emailIdAsUsername = email.split('@')[0];
+        if (emailIdAsUsername !== username) {
+            return NextResponse.json({
+                success: false,
+                message: "You must use your university ID as username (e.g., 2110100...).",
+            },
+                { status: 400 })
+        }
 
         //3. Check if the username is already taken by a verified user
         const existingUserVerifiedByUsername = await UserModel.findOne({

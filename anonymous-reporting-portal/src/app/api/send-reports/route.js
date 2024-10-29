@@ -20,9 +20,18 @@ export async function POST(req) {
         await dbConnect();
 
         // Step 3: Parse incoming report data
-        const reqBody = await req.json(); // Use req.json() to get body in App Router
-        const { department, issueType, description, evidence } = reqBody;
+        const reqBody = await req.json();
+        const { department, issueType, description, evidence, occurrenceDate } = reqBody;
 
+       
+        const parsedDate = new Date(occurrenceDate);
+        if (isNaN(parsedDate.getTime())) {
+            return NextResponse.json({
+                success: false,
+                message: "Invalid date format for occurrence date."
+            }, { status: 400 });
+        }
+        
         // Step 4: Generate a unique anonymous code
         const anonymousCode = nanoid(8); // Example unique code generation
 
@@ -32,7 +41,8 @@ export async function POST(req) {
             department,
             issueType,
             description,
-            evidence: evidence || [], // Optional evidence
+            occurrenceDate: parsedDate, 
+            evidence: evidence || [], 
             status: "new",
             isEscalated: false,
             messages: []

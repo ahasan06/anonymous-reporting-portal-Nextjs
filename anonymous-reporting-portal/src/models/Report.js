@@ -52,6 +52,11 @@ const ReportSchema = new mongoose.Schema({
             'other'
         ],
     },
+    occurrenceDate: {
+        type: Date,
+        required: true,
+    },
+    
     description: {
         type: String,
         required: true,

@@ -195,14 +195,14 @@ function SignUp() {
                   <>Signup</>
                 )}
               </Button>
-              <Button
+              {/* <Button
                 type="button"
                 onClick={handleGoogleSignIn} // Call the signIn function on click
                 className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
               >
                 <AiFillGoogleCircle className="w-5 h-5" />
                 <span>Sign in with Google as user</span>
-              </Button>
+              </Button> */}
             </div>
           </form>
         </Form>

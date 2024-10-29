@@ -1,5 +1,5 @@
 import transporter from "./nodemailerTransporter";
-import { generateVerificationEmail } from "./emailTemplate";
+import { generateVerificationEmail } from "./emailTemplates";
 export async function sendVerificationEmail(email, username, verifyCode) {
     try {
         const emailContent = generateVerificationEmail(username, verifyCode);
