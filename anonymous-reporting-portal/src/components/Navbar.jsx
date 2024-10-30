@@ -79,9 +79,7 @@ function Navbar() {
                   <Link href="/communicateWith-user" className="text-white hover:text-gray-400">
                     Reply to Reports
                   </Link>
-                  <Link href="/user-management" className="text-white hover:text-gray-400">
-                    User Management
-                  </Link>
+                
                 </>
               )
             }
