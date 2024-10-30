@@ -36,6 +36,6 @@ export const config = {
     '/communicateWith-user',
     '/sign-in',
     '/sign-up',
-    '/manage-reports',    // Ensure admin paths are included in matcher
+    '/manage-reports',   
   ],
 };

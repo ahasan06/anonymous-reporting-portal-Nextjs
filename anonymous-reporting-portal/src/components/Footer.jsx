@@ -1,120 +1,91 @@
 import React from "react";
+import { FaFacebookF, FaLinkedinIn, FaGlobe } from "react-icons/fa";
+import Image from "next/image";
+import Link from "next/link";
 
 function Footer() {
   return (
     <footer className="bg-blue-950 text-white">
+      {/* Footer Content */}
       <div className="max-w-7xl mx-auto py-10 px-5 md:px-0 grid grid-cols-1 md:grid-cols-3 gap-8">
+        
         {/* University Logo & Info */}
-        <div className="flex flex-col items-center md:items-start">
-          <img
+        <div className="flex flex-col items-center md:items-start text-center md:text-left">
+          <Image
             src="/university-logo.png" // Replace with actual logo file path
             alt="University Logo"
-            className="w-20 h-20 mb-4"
+            width={80}
+            height={80}
+            className="mb-4"
           />
-          <h3 className="text-lg font-semibold">University Name</h3>
-          <p className="mt-2 text-sm text-gray-300">
+          <h3 className="text-lg font-semibold">University of Asia Pacific</h3>
+          <address className="mt-2 text-sm text-gray-300 not-italic">
             123 University Street, City, Country <br />
             Email: contact@university.edu <br />
             Phone: +123-456-7890
-          </p>
+          </address>
         </div>
 
         {/* Useful Links */}
-        <div className="flex flex-col items-center md:items-start">
+        <div className="flex flex-col items-center md:items-start text-center md:text-left">
           <h3 className="text-lg font-semibold mb-4">Useful Links</h3>
-          <ul className="space-y-2 text-sm">
+          <ul className="space-y-2 text-sm text-gray-300">
             <li>
-              <a
-                href="https://www.university-website.com"
-                className="hover:underline text-gray-300"
-              >
+              <Link href="https://www.university-website.com" className="hover:underline">
                 University Website
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="https://www.university-website.com/admissions"
-                className="hover:underline text-gray-300"
-              >
+              <Link href="https://www.university-website.com/admissions" className="hover:underline">
                 Admissions
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="https://www.university-website.com/courses"
-                className="hover:underline text-gray-300"
-              >
+              <Link href="https://www.university-website.com/courses" className="hover:underline">
                 Courses
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="https://www.university-website.com/contact"
-                className="hover:underline text-gray-300"
-              >
+              <Link href="https://www.university-website.com/contact" className="hover:underline">
                 Contact Us
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
 
         {/* Social Media Links */}
-        <div className="flex flex-col items-center md:items-start">
+        <div className="flex flex-col items-center md:items-start text-center md:text-left">
           <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
-          <div className="flex space-x-4">
-            <a
-              href="https://www.facebook.com/university"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="University Facebook"
-              className="hover:text-blue-500 transition"
-            >
-              <i className="fab fa-facebook-f text-2xl"></i>
-            </a>
-            <a
-              href="https://www.linkedin.com/school/university"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="University LinkedIn"
-              className="hover:text-blue-400 transition"
-            >
-              <i className="fab fa-linkedin text-2xl"></i>
-            </a>
-            <a
-              href="https://www.university-website.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="University Website"
-              className="hover:text-blue-300 transition"
-            >
-              <i className="fas fa-globe text-2xl"></i>
-            </a>
+          <div className="flex space-x-4 text-2xl">
+            <Link href="https://www.facebook.com/university" target="_blank" aria-label="University Facebook" className="hover:text-blue-500 transition">
+              <FaFacebookF />
+            </Link>
+            <Link href="https://www.linkedin.com/school/university" target="_blank" aria-label="University LinkedIn" className="hover:text-blue-400 transition">
+              <FaLinkedinIn />
+            </Link>
+            <Link href="https://www.university-website.com" target="_blank" aria-label="University Website" className="hover:text-blue-300 transition">
+              <FaGlobe />
+            </Link>
           </div>
         </div>
       </div>
 
       {/* Footer Bottom */}
       <div className="bg-blue-900 py-4">
-        <div className="max-w-7xl mx-auto px-5 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-sm text-gray-300">
-            &copy; {new Date().getFullYear()} University Name. All Rights Reserved.
+        <div className="max-w-7xl mx-auto px-5 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+          <p className="text-sm text-gray-300 mb-2 md:mb-0">
+            &copy; {new Date().getFullYear()} University OF Asia Pacific. All Rights Reserved.
           </p>
-          <ul className="flex space-x-4 mt-2 md:mt-0">
+          <ul className="flex space-x-4 text-sm text-gray-300">
             <li>
-              <a
-                href="/privacy-policy"
-                className="text-gray-300 text-sm hover:underline"
-              >
+              <Link href="/privacy-policy" className="hover:underline">
                 Privacy Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="/terms-of-service"
-                className="text-gray-300 text-sm hover:underline"
-              >
+              <Link href="/terms-of-service" className="hover:underline">
                 Terms of Service
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
