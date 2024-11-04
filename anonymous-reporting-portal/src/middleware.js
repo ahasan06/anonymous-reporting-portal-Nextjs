@@ -7,7 +7,7 @@ export async function middleware(request) {
 
   // If the user is authenticated and tries to access sign-in or sign-up, redirect to home or dashboard
   if (token && (pathname === '/sign-in' || pathname === '/sign-up')) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   // If the user is not authenticated and is trying to access protected routes, redirect to sign-in
@@ -16,10 +16,10 @@ export async function middleware(request) {
   }
 
   // Restrict access to admin-only pages based on user role
-  const adminPaths = ['/manage-reports','/communicateWith-user']; // Add other admin-only pages here
-  if (adminPaths.includes(pathname) && token.role !== 'admin') {
-    return NextResponse.redirect(new URL('/unauthorized', request.url)); // Redirect unauthorized users
-  }
+  // const adminPaths = ['/manage-reports','/communicateWith-user']; // Add other admin-only pages here
+  // if (adminPaths.includes(pathname) && token.role !== 'admin') {
+  //   return NextResponse.redirect(new URL('/unauthorized', request.url)); // Redirect unauthorized users
+  // }
 
   // Allow the request to continue if the conditions above are not met
   return NextResponse.next();
@@ -29,6 +29,7 @@ export async function middleware(request) {
 export const config = {
   matcher: [
     '/',
+    '/dashboard',
     '/communicate-admin',
     '/report-success',
     '/submit-report',
