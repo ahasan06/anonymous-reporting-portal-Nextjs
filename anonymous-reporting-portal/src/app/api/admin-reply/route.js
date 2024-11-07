@@ -22,12 +22,12 @@ export async function POST(req) {
         // Step 3: Parse the incoming request body
         const reqBody = await req.json();
         console.log("Request body received:", reqBody); // Log the request body for verification
-        const { reportId, replyMessage, status } = reqBody;
+        const { anonymousCode, replyMessage, status } = reqBody;
 
         // Step 4: Find the report by anonymous code (reportId)
-        const report = await Report.findOne({ anonymousCode: reportId });
+        const report = await Report.findOne({anonymousCode});
         if (!report) {
-            console.log("Report not found for ID:", reportId); // Log if report is not found
+            console.log("Report not found for ID:", anonymousCode); // Log if report is not found
             return NextResponse.json({
                 success: false,
                 message: "Report not found."

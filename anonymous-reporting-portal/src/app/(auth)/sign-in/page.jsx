@@ -17,6 +17,7 @@ import { signIn } from 'next-auth/react';
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const router = useRouter();
   
 
@@ -30,6 +31,7 @@ function SignIn() {
 
   const onSubmit = async (data) => {
     try {
+      setIsSubmitting(true)
       const signinResult = await signIn('credentials', {
         redirect: false,
         identifier: data.identifier,
@@ -49,6 +51,9 @@ function SignIn() {
       const errorMessage = error.response?.data?.message || 'Signup failed. Please try again.';
       console.log("errorMessage", errorMessage);
       toast.error(errorMessage);
+    }
+    finally{
+      setIsSubmitting(false)
     }
   }
 
