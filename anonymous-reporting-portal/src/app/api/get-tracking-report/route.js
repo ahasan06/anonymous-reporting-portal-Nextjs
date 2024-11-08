@@ -17,7 +17,7 @@ export async function GET(request) {
             );
         }
 
-        const report = await ReportModel.findOne({ anonymousCode }).select("anonymousCode createdAt department issueType status description messages");
+        const report = await ReportModel.findOne({ anonymousCode }).select("anonymousCode createdAt department occurrenceDate issueType status description messages");
         
         if (!report) {
             return NextResponse.json(
