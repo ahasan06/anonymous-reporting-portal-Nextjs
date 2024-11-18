@@ -61,9 +61,18 @@ const ReportSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    evidence: {
-        type: [String], 
-    },
+    evidence: [
+        {
+            id: {
+                type: String, 
+                required: true,
+            },
+            url: {
+                type: String, 
+                required: true,
+            }
+        }
+    ],
     createdAt: {
         type: Date,
         default: Date.now,
@@ -81,6 +90,7 @@ const ReportSchema = new mongoose.Schema({
 });
 
 ReportSchema.pre('save', function (next) {
+    
     this.lastUpdated = Date.now();
     next();
 });

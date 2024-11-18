@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
@@ -44,7 +45,9 @@ const ISSUE_TYPE_OPTIONS = [
 
 function SubmitReport() {
     const [evidenceFiles, setEvidenceFiles] = useState([]);
+    const [imagePreviews, setImagePreviews] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
     const router = useRouter();
 
     const form = useForm({
@@ -61,41 +64,88 @@ function SubmitReport() {
     // Handle file upload
     const handleFileUpload = (e) => {
         const files = Array.from(e.target.files);
+        const previews = files.map((file) => {
+            return URL.createObjectURL(file)
+        });
         setEvidenceFiles(files);
+        setImagePreviews(previews);
     };
 
-    const onSubmit = async (data) => {
-        setIsSubmitting(true)
-        // Combine form data with uploaded files
-        const formData = {
-            ...data,
-            evidence: evidenceFiles,
-        };
-        console.log(formData);
+    // Upload files to Cloudinary
+    const uploadFilesToCloudinary = async (files) => {
+        const formData = new FormData();
+        files.forEach(file => {
+            formData.append('image', file)
+        });
 
         try {
-
-            const response = await axios.post('/api/send-reports', formData);
-            console.log("report response :", response);
-            toast.success('Report submitted successfully');
-            const code = response?.data?.anonymousCode
-            if (!code) {
-                toast.error("anonymouse tracking code not found!")
+            const response = await axios.post('/api/uploadImage', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+            
+            // Ensure the response contains valid data
+            if (response.data?.uploads) {
+                // Return an array of image objects with 'id' and 'url'
+                return response.data.uploads.map(image => ({
+                    id: image.id,    // Cloudinary unique identifier
+                    url: image.url,  // URL of the uploaded image
+                }));
+            } else {
+                throw new Error("No uploaded files found in response");
             }
-            else {
+        } catch (error) {
+            console.error("File upload failed:", error);
+            throw new Error("File upload failed");
+        }
+    }
+
+    const onSubmit = async (data) => {
+        setIsSubmitting(true);
+
+        let uploadedImages = [];
+
+        // Upload files to Cloudinary only if files are provided
+        if (evidenceFiles.length > 0) {
+            uploadedImages = await uploadFilesToCloudinary(evidenceFiles);
+            if (!uploadedImages || uploadedImages.length === 0) {
+                toast.error("File upload failed!");
+                setIsSubmitting(false);
+                return;
+            }
+        }
+
+
+        // Ensure each uploaded image has the required 'id' and 'url' properties
+        const formattedEvidence = uploadedImages.map(image => ({
+            id: image.id,  // Cloudinary's unique ID
+            url: image.url,  // URL of the uploaded image
+        }));
+        const formData = { ...data, evidence: formattedEvidence };
+
+        try {
+            const response = await axios.post('/api/send-reports', formData);
+            toast.success('Report submitted successfully');
+
+            const code = response?.data?.anonymousCode;
+            if (!code) {
+                toast.error("Anonymous tracking code not found!");
+            } else {
                 router.push(`/report-success?code=${code}`);
             }
-            form.reset()
-            setEvidenceFiles([])
+
+            // Reset form and states
+            form.reset();
+            setEvidenceFiles([]);
+            setImagePreviews([]);
         } catch (error) {
-            const errorMessage = error.response.data.message || "an error occured!"
-            console.log(error.message);
+            const errorMessage = error.response?.data?.message || "An error occurred!";
+            console.error(error.message);
             toast.error(errorMessage);
-        }
-        finally {
+        } finally {
             setIsSubmitting(false);
         }
     };
+    
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -191,14 +241,18 @@ function SubmitReport() {
                                 onChange={handleFileUpload}
                                 className="mt-2"
                             />
-                            {evidenceFiles.length > 0 && (
-                                <ul className="mt-2">
-                                    {evidenceFiles.map((file, index) => (
-                                        <li key={index} className="text-sm text-gray-600">
-                                            {file.name}
-                                        </li>
+                            {imagePreviews.length > 0 && (
+                                <div className="mt-4 grid grid-cols-2 gap-4">
+                                    {imagePreviews.map((preview, index) => (
+                                        <div key={index} className="relative">
+                                            <img
+                                                src={preview}
+                                                alt={`Preview ${index + 1}`}
+                                                className="w-full h-auto object-cover rounded shadow"
+                                            />
+                                        </div>
                                     ))}
-                                </ul>
+                                </div>
                             )}
                         </FormItem>
 

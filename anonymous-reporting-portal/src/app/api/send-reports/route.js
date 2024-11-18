@@ -23,7 +23,7 @@ export async function POST(req) {
         const reqBody = await req.json();
         const { department, issueType, description, evidence, occurrenceDate } = reqBody;
 
-       
+        // Validate the occurrenceDate
         const parsedDate = new Date(occurrenceDate);
         if (isNaN(parsedDate.getTime())) {
             return NextResponse.json({
@@ -31,11 +31,28 @@ export async function POST(req) {
                 message: "Invalid date format for occurrence date."
             }, { status: 400 });
         }
-        
-        // Step 4: Generate a unique anonymous code
+
+        // Step 4: Validate evidence
+        if (evidence && Array.isArray(evidence)) {
+            for (const item of evidence) {
+                if (!item.id || !item.url) {
+                    return NextResponse.json({
+                        success: false,
+                        message: "Each evidence item must include both 'id' and 'url'."
+                    }, { status: 400 });
+                }
+            }
+        } else {
+            return NextResponse.json({
+                success: false,
+                message: "Evidence must be an array of objects with 'id' and 'url'."
+            }, { status: 400 });
+        }
+
+        // Step 5: Generate a unique anonymous code
         const anonymousCode = nanoid(8); // Example unique code generation
 
-        // Step 5: Create the report in the database
+        // Step 6: Create the report in the database
         const newReport = new Report({
             anonymousCode,
             department,
@@ -48,10 +65,10 @@ export async function POST(req) {
             messages: []
         });
 
-        // Step 6: Save the report
+        // Step 7: Save the report
         const savedReport = await newReport.save();
 
-        // Step 7: Respond with success and return the unique code
+        // Step 8: Respond with success and return the unique code
         return NextResponse.json({
             success: true,
             message: "Report submitted successfully.",
