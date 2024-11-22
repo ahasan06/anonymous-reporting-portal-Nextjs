@@ -11,11 +11,11 @@ function ContactPage() {
   };
 
   return (
-    <>
+    <div className='bg-gray-100 '>
       <Head>
         <title>Contact Us - UAP</title>
       </Head>
-      <div className="min-h-screen bg-gray-100 p-8 flex items-center justify-center">
+      <div className="min-h-screen max-w-4xl mx-auto p-8 flex items-center justify-center">
         <div className="container mx-auto bg-white shadow-lg rounded-lg overflow-hidden md:flex">
           <div className="bg-blue-600 text-white p-4 md:w-1/3">
             <h2 className="text-xl font-bold mb-2 flex items-center">
@@ -62,10 +62,8 @@ function ContactPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
 export default ContactPage;
-
-
