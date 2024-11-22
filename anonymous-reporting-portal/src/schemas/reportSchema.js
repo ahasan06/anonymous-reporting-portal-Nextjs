@@ -9,6 +9,6 @@ export const reportSchema = z.object({
     occurrenceDate: z.string().refine(date => !isNaN(Date.parse(date)), {
         message: "Occurrence date is required and must be a valid date."
     }),
-    evidence: z.array(z.string().url().optional()).optional(),
+
 });
 

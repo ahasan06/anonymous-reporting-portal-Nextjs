@@ -61,18 +61,16 @@ const ReportSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    evidence: [
+    evidence: 
         {
             id: {
                 type: String, 
-                required: true,
             },
             url: {
                 type: String, 
-                required: true,
             }
         }
-    ],
+    ,
     createdAt: {
         type: Date,
         default: Date.now,

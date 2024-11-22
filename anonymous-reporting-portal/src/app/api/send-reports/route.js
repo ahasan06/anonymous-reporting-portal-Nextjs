@@ -32,22 +32,7 @@ export async function POST(req) {
             }, { status: 400 });
         }
 
-        // Step 4: Validate evidence
-        if (evidence && Array.isArray(evidence)) {
-            for (const item of evidence) {
-                if (!item.id || !item.url) {
-                    return NextResponse.json({
-                        success: false,
-                        message: "Each evidence item must include both 'id' and 'url'."
-                    }, { status: 400 });
-                }
-            }
-        } else {
-            return NextResponse.json({
-                success: false,
-                message: "Evidence must be an array of objects with 'id' and 'url'."
-            }, { status: 400 });
-        }
+  
 
         // Step 5: Generate a unique anonymous code
         const anonymousCode = nanoid(8); // Example unique code generation
@@ -59,7 +44,7 @@ export async function POST(req) {
             issueType,
             description,
             occurrenceDate: parsedDate, 
-            evidence: evidence || [], 
+            evidence, 
             status: "new",
             isEscalated: false,
             messages: []

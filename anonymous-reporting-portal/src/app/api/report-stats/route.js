@@ -21,7 +21,7 @@ export async function GET(request) {
         const totalReports = await ReportModel.countDocuments();
         const newReports = await ReportModel.countDocuments({ status: "new" });
         const inProgressReports = await ReportModel.countDocuments({ status: "in-progress" });
-        const solvedReports = await ReportModel.countDocuments({ status: "solved" });
+        const solvedReports = await ReportModel.countDocuments({ status: "resolved" });
 
         return NextResponse.json({
             success: true,

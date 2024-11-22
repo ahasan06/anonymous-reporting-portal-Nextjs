@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import ChatBot from '@/components/ChatBot';
-import productImage from '../../../../public/occurance.jpg';
+import noevidance from '../../../../public/no-evidance.webp';
 import { AiOutlineMessage } from 'react-icons/ai';
 import { useSearchParams } from "next/navigation";
 import axios from 'axios';
@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-function ProductDetail() {
+function ReportDetails() {
 
   const reportStatus = ['in-progress', 'resolved']
   const searchParams = useSearchParams();
@@ -79,7 +79,7 @@ function ProductDetail() {
 
   const handleDeleteReport = async () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this report?");
-    if (!confirmDelete) return; 
+    if (!confirmDelete) return;
     try {
       setIsDeleteLoading(true);
       const response = await axios.delete('/api/change-report-status', {
@@ -141,11 +141,14 @@ function ProductDetail() {
 
         <div className=" flex justify-center">
           <Image
-            src={productImage}
-            alt="Product Image"
+            src={report?.evidence?.url || noevidance}
+            alt="noevidance"
             height={400}
+            width={400}
             className="object-cover rounded shadow-lg"
+            unoptimized={!!report?.evidence?.url}
           />
+
         </div>
 
         <div className="w-full lg:w-1/2 space-y-4">
@@ -273,4 +276,4 @@ function ProductDetail() {
   );
 }
 
-export default ProductDetail;
+export default ReportDetails;
